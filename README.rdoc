@@ -1,0 +1,39 @@
+= Snake Catch
+
+Send exception to Snake sever via Snake API
+
+== Install
+
+Via gem:
+  
+  gem "snake_catch"
+
+Via plugin
+
+  rails plugin install http://github.com/Brainberry/snake_catch
+  
+== Configure
+
+In initializer folder create file @config/initializers/snake_catch.rb@:
+
+  if Object.const_defined?("SnakeCatch")
+    SnakeCatch.setup do |config|
+      config.project_key = "YOUR PROJECT API KEY"
+      #config.ignore_exceptions += [ AbstractController::Error ]
+    end
+  end
+  
+By default ignored exceptions are:
+
+* ActiveRecord::RecordNotFound
+* AbstractController::ActionNotFound
+* ActionController::RoutingError
+
+== Advanced Usage
+
+  SnakeCatch::Notifier.perform(env, exception)
+  
+== Todo
+
+* Write more documentation
+* Fix bugs
