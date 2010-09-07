@@ -1,8 +1,6 @@
 # encoding: utf-8
-
 module SnakeCatch 
-  class Middleware
-  
+  class Middleware  
     def initialize(app, options = {})
       @app, @options = app, options
     end
