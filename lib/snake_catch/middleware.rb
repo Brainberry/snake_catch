@@ -5,13 +5,13 @@ module SnakeCatch
   
     def initialize(app, options = {})
       @app, @options = app, options
-      @options[:ignore_exceptions] ||= SnakeCatch.all_ignore_exceptions
     end
    
     def call(env)
       @app.call(env)
-    rescue Exception => exception    
+    rescue Exception => exception
       options = (env['snake_catch.options'] ||= {})
+      options[:ignore_exceptions] ||= SnakeCatch.all_ignore_exceptions
       options.reverse_merge!(@options)
       
       unless Array.wrap(options[:ignore_exceptions]).include?(exception.class)

@@ -19,7 +19,8 @@ In initializer folder create file @config/initializers/snake_catch.rb@:
   if Object.const_defined?("SnakeCatch")
     SnakeCatch.setup do |config|
       config.project_key = "YOUR PROJECT API KEY"
-      #config.ignore_exceptions += [ AbstractController::Error ]
+      #config.callback_url = "http://localhost:3000/issues"
+      #config.ignore_exceptions += [ ActionController::InvalidAuthenticityToken ]
     end
   end
   
@@ -28,6 +29,13 @@ By default ignored exceptions are:
 * ActiveRecord::RecordNotFound
 * AbstractController::ActionNotFound
 * ActionController::RoutingError
+
+== Dependency
+
+SnakeCatch depend on curb gem.
+
+  sudo apt-get install curl libcurl3 libcurl3-dev
+  sudo gem install curb
 
 == Advanced Usage
 

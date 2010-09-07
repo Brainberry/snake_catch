@@ -10,7 +10,11 @@ module SnakeCatch
         params = em.params
         params << Curl::PostField.content('project_key', SnakeCatch.project_key)
         
-        Curl::Easy.http_post("http://localhost:3000", *params)
+        begin
+          Curl::Easy.http_post(SnakeCatch.callback_url, *params)
+        rescue Curl::Err::ConnectionFailedError => e
+          raise exception
+        end
       end
     end
   end

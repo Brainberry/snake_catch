@@ -39,7 +39,7 @@ module SnakeCatch
       end
       
       @params << Curl::PostField.content('session', @request.session.inspect)
-      @params << Curl::PostField.content('backtrace', sanitize_backtrace(@exception.application_backtrace))
+      @params << Curl::PostField.content('backtrace', sanitize_backtrace(application_trace(@exception)))
       @params << Curl::PostField.content('environment', sanitize_environment(@env))
       @params << Curl::PostField.content('data', @data.inspect)
       
@@ -70,6 +70,24 @@ module SnakeCatch
         else
           data.to_s
         end
+      end
+      
+      def application_trace(exception)
+        clean_backtrace(exception, :silent)
+      end
+
+      def framework_trace(exception)
+        clean_backtrace(exception, :noise)
+      end
+
+      def full_trace(exception)
+        clean_backtrace(exception, :all)
+      end
+
+      def clean_backtrace(exception, *args)
+        defined?(Rails) && Rails.respond_to?(:backtrace_cleaner) ?
+          Rails.backtrace_cleaner.clean(exception.backtrace, *args) :
+          exception.backtrace
       end
       
       def sanitize_backtrace(trace)

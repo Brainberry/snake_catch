@@ -5,6 +5,9 @@ module SnakeCatch
   autoload :Issue,      'snake_catch/issue'
   autoload :Rescue,     'snake_catch/rescue'
   
+  mattr_accessor :callback_url
+  @@callback_url = "http://localhost:3000/issues"
+  
   mattr_accessor :project_key
   @@project_key = "demo"
   
@@ -13,9 +16,9 @@ module SnakeCatch
   
   def self.default_ignore_exceptions
     [].tap do |exceptions|
-      exceptions << ActiveRecord::RecordNotFound if defined? ActiveRecord
-      exceptions << AbstractController::ActionNotFound if defined? AbstractController
-      exceptions << ActionController::RoutingError if defined? ActionController
+      exceptions << ActiveRecord::RecordNotFound       if Object.const_defined?("ActiveRecord")
+      exceptions << AbstractController::ActionNotFound if Object.const_defined?("AbstractController")
+      exceptions << ActionController::RoutingError     if Object.const_defined?("ActionController")
     end
   end
   
@@ -29,4 +32,4 @@ module SnakeCatch
   end
 end
 
-require 'snake_catch/railtie'
+require 'snake_catch/railtie' if Object.const_defined?("Rails")
